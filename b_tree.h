@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
+#define REPCOUNT 15
 
 typedef int key_type;
 
@@ -50,5 +53,6 @@ void print_data(Data *data);
 int print_beauty_tree(Tree *tree);
 //int int_len(int a);
 void input_from_file(Tree *tree);
+void timing_search(void);
 
 #endif

@@ -130,9 +130,13 @@ static Tree_element *create_tree_element(key_type key, Data *data, Tree_element 
 
 
 static void del_element(Tree_element *element){
-	free(element->data->string);
-	free(element->data);
-	free(element);
+	if (element->data){
+		free(element->data->string);
+		free(element->data);
+		free(element);
+	} else{
+		free(element);	
+	}
 }
 
 
@@ -164,7 +168,7 @@ Data *insert(Tree *tree, key_type key, Data *data){
 			}
 		}
 		else{
-			printf("~~~We have already the same key~~~\n");
+			//printf("~~~We have already the same key~~~\n");
 			Data *tmp;
 			tmp = now->data;
 			now->data = data;
@@ -436,5 +440,52 @@ void input_from_file(Tree *tree){
 	}
 	fclose(file);
 	printf("Information has been loaded\n");
+}
+
+
+int rnd_int(int start, int end){
+    return (start + rand()%(end - start + 1));
+}
+
+
+Tree *rnd_tree(int count_element){
+	srand(time(NULL));
+	Tree *tree = create_tree();
+	key_type key;
+	for (int i=0; i<count_element; i++){
+		key = rnd_int(0, 100000);
+		while (get_ptr_by_key(tree, key)!=NULL){
+			key = rnd_int(0, 100000);
+		}
+		insert(tree, key, NULL);
+	}
+	return tree;
+}
+
+
+void timing_search(void){
+	int count_element = 0;
+	key_type key;
+	printf("Enter the element count\n");
+	get_int(&count_element);
+	clock_t time_start = 0;
+	clock_t time_end = 0;
+    double timing = 0;
+    double time_res = 0;
+	Tree *tree = NULL;
+	tree = rnd_tree(count_element);
+	for (int i=0; i<REPCOUNT; i++){
+		key = rnd_int(0, 100000);
+		time_start = clock();
+		get_ptr_by_key(tree, key);
+		time_end = clock() - time_start;
+		timing = (double)time_end / CLOCKS_PER_SEC;
+		time_res += timing;
+	}
+	del_tree(tree);
+	free(tree);
+	tree = NULL;
+	time_res /= REPCOUNT;
+	printf("Time -> %.10f\n", time_res);
 }
 

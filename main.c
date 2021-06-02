@@ -17,7 +17,8 @@ void print_menu(void){
 	printf("7) Print tree\n");
 	printf("8) Print beauty tree\n");
 	printf("9) Delete all tree\n");
-	printf("10) Exit\n");
+	printf("10) Timing search\n");
+	printf("11) Exit\n");
 	printf("~~~~~~~~~~\n");
 }
 
@@ -57,7 +58,7 @@ void UI(void){
 		do{
 			printf("Select one of the following options\n");
 			get_int(&choice);
-		} while (choice<0 || choice>10);
+		} while (choice<0 || choice>11);
 		switch (choice){
 			case 0:
 			{
@@ -136,7 +137,7 @@ void UI(void){
 				del_tree(tree);
 				break;
 			}
-			case 10:
+			case 11:
 			{
 				del_tree(tree);
 				free(tree);
@@ -145,9 +146,14 @@ void UI(void){
 			case 8:
 			{
 				print_beauty_tree(tree);
+				break;
+			}
+			case 10:{
+				timing_search();
+				break;
 			}
 		}
-	} while (choice!=10);
+	} while (choice!=11);
 }
 
 
